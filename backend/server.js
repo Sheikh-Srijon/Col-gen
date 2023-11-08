@@ -47,9 +47,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  // Send the HTML file located in the 'public' directory
-  // res.sendFile(__dirname + '../frontend/data-generation.html');
-  // res.sendFile(__dirname + "/../frontend/src/index.js");
+ 
   res.send("<h1>Hello</h1>");
 });
 
@@ -59,6 +57,15 @@ app.post("/submit", async (req, res) => {
     // Access the essays collection in the database (create it if it doesn't exist)
     const db = client.db("essay_db");
     const essaysCollection = db.collection("essays");
+    // Check if an essay with the same content already exists
+    const existingEssay = await essaysCollection.findOne({ essay });
+
+    if (existingEssay) {
+      // If a duplicate essay is found, return an error response
+      return res
+        .status(400)
+        .send("Essay with the same content already exists.");
+    }
 
     // Create a new essay document and insert it into the collection
     const newEssay = {
@@ -71,7 +78,7 @@ app.post("/submit", async (req, res) => {
     // Close the MongoDB connection
     // client.close();
 
-    res.status(200).send( result);
+    res.status(200).send(result);
   } catch (err) {
     console.error("Error:", err);
     res.status(500).send("Internal Server Error");
