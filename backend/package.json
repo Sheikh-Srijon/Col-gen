@@ -1,9 +1,12 @@
+
 {
   "name": "backend",
   "version": "1.0.0",
   "description": "backend of generative essay writing app",
   "main": "server.js",
-  "scripts": {
+  "scripts": {      
+    "start": "node server.js", // Add this line
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Srijon",
